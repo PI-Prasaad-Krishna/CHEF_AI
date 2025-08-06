@@ -1,9 +1,13 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ChefHat, Utensils, Salad } from 'lucide-react';
+import React, { useState } from 'react';
+// Import AnimatePresence from framer-motion
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChefHat, Utensils, Salad, LogOut } from 'lucide-react';
+import { doSignOut } from '../auth/firebase';
 
-// The Header now takes a 'setPage' function as a prop to control navigation
-const Header = ({ setPage }) => (
+const Header = ({ setPage, user, onSignInClick }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  return (
     <motion.header 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -15,7 +19,6 @@ const Header = ({ setPage }) => (
             <span className="text-2xl font-bold">ChefAI</span>
         </button>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-            {/* Added an explicit Home button for clarity */}
             <button onClick={() => setPage('home')} className="hover:text-pink-400 transition-colors">Home</button>
             <button onClick={() => setPage('about')} className="hover:text-pink-400 transition-colors">About Us</button>
             <button onClick={() => setPage('pricing')} className="hover:text-pink-400 transition-colors">Pricing</button>
@@ -25,9 +28,42 @@ const Header = ({ setPage }) => (
         <div className="flex items-center gap-4">
             <Utensils className="w-5 h-5 hover:text-pink-400 transition-colors cursor-pointer"/>
             <Salad className="w-5 h-5 hover:text-pink-400 transition-colors cursor-pointer"/>
-            <div className="w-8 h-8 bg-pink-500 rounded-full"></div>
+            <div className="relative">
+              {user ? (
+                // If user is logged in, show their profile picture
+                <button onClick={() => setShowDropdown(!showDropdown)} onBlur={() => setTimeout(() => setShowDropdown(false), 200)}>
+                  {/* This line is updated for a more robust fallback */}
+                  <img src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email || 'C'}&background=d85c8b&color=fff`} alt="Profile" className="w-9 h-9 rounded-full border-2 border-pink-400" />
+                </button>
+              ) : (
+                // If user is not logged in, show the sign-in button
+                <button onClick={onSignInClick} className="w-9 h-9 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"></button>
+              )}
+              
+              {/* Dropdown Menu */}
+              <AnimatePresence>
+                {showDropdown && user && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute top-12 right-0 bg-gray-800 rounded-lg shadow-lg w-48 border border-white/10 z-20"
+                  >
+                    <div className="p-2">
+                      <p className="text-sm font-semibold px-2 py-1 truncate">{user.displayName || user.email}</p>
+                      <hr className="border-gray-700 my-1" />
+                      <button onClick={doSignOut} className="w-full flex items-center gap-2 text-left px-2 py-2 text-sm text-red-400 hover:bg-white/5 rounded">
+                        <LogOut className="w-4 h-4" />
+                        Sign Out
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
         </div>
     </motion.header>
-);
+  );
+};
 
 export default Header;
