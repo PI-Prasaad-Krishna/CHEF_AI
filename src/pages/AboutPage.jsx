@@ -11,9 +11,9 @@ const AboutPage = () => {
       transition={{ duration: 0.5 }}
       className="text-white max-w-4xl mx-auto p-8"
     >
-      <h1 className="text-5xl font-bold mb-4 text-pink-400">About ChefAI</h1>
+      <h1 className="text-5xl font-bold mb-4 text-pink-400">About GetChef</h1>
       <p className="text-lg text-gray-300 mb-12">
-        ChefAI was born from a simple idea: what if you could create amazing meals with just the ingredients you already have? We're a passionate team of foodies, developers, and AI enthusiasts dedicated to making cooking more creative, less wasteful, and a lot more fun.
+        GetChef was born from a simple idea: what if you could create amazing meals with just the ingredients you already have? We're a passionate team of foodies, developers, and AI enthusiasts dedicated to making cooking more creative, less wasteful, and a lot more fun.
       </p>
 
       <div className="grid md:grid-cols-3 gap-8 text-center">

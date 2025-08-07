@@ -21,7 +21,7 @@ const Header = ({ setPage, user, onSignInClick }) => {
     >
         <button onClick={() => setPage('home')} className="flex items-center gap-2 focus:outline-none">
             <ChefHat className="w-8 h-8 text-pink-400" />
-            <span className="text-2xl font-bold">ChefAI</span>
+            <span className="text-2xl font-bold">GetChef</span>
         </button>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             <button onClick={() => setPage('home')} className="hover:text-pink-400 transition-colors">Home</button>
@@ -53,7 +53,6 @@ const Header = ({ setPage, user, onSignInClick }) => {
                     <div className="p-2">
                       <p className="text-sm font-semibold px-2 py-1 truncate">{user.displayName || user.email}</p>
                       <hr className="border-gray-700 my-1" />
-                      {/* New "My Recipes" button */}
                       <button onClick={() => { setPage('my-recipes'); setShowDropdown(false); }} className="w-full flex items-center gap-2 text-left px-2 py-2 text-sm hover:bg-white/5 rounded">
                         <Bookmark className="w-4 h-4" />
                         My Recipes

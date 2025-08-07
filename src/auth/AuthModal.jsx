@@ -56,7 +56,7 @@ const AuthModal = ({ show, onClose }) => {
 
             <div className="p-8">
               <h2 className="text-3xl font-bold mb-2 text-pink-400">{isSignUp ? 'Create Account' : 'Welcome Back'}</h2>
-              <p className="text-gray-400 mb-6">{isSignUp ? 'Join ChefAI to save your favorite recipes.' : 'Sign in to continue.'}</p>
+              <p className="text-gray-400 mb-6">{isSignUp ? 'Join GetChef to save your favorite recipes.' : 'Sign in to continue.'}</p>
 
               <button onClick={handleGoogleSignIn} className="w-full flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 p-3 rounded-lg font-semibold transition-colors mb-6">
                 <img src="https://www.google.com/favicon.ico" alt="Google icon" className="w-5 h-5" />

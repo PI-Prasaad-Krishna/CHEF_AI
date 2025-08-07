@@ -21,7 +21,7 @@ const BlogPage = () => {
       transition={{ duration: 0.5 }}
       className="text-white max-w-6xl mx-auto p-8"
     >
-      <h1 className="text-5xl font-bold mb-4 text-center">The ChefAI Blog</h1>
+      <h1 className="text-5xl font-bold mb-4 text-center">The GetChef Blog</h1>
       <p className="text-lg text-gray-400 mb-12 text-center">
         Tips, tricks, and culinary inspiration from our kitchen to yours.
       </p>
@@ -37,7 +37,7 @@ const BlogPage = () => {
             title="The Science of Flavor Pairing"
             excerpt="Ever wondered why certain ingredients taste so good together? We dive into the data behind delicious combinations."
             date="July 28, 2025"
-            imageUrl="https://images.unsplash.com/photo-1484723051597-62b8a788a660?q=80&w=2070&auto=format&fit=crop"
+            imageUrl="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1887&auto=format&fit=crop"
         />
         <BlogPostCard 
             title="Reducing Food Waste, One Recipe at a Time"
