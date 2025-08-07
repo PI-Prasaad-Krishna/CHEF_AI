@@ -1,16 +1,22 @@
-// This function now uses OpenRouter and the Mistral model
 export const generateRecipe = async (userPrompt) => {
     if (!userPrompt) {
         return { error: "Please enter a dish or ingredients." };
     }
 
-    // The prompt is updated to be more direct for the new model
+    // This new, more robust prompt includes a "guardrail" instruction.
     const prompt = `
-        You are a creative chef. Generate a recipe based on the user's request.
+        You are an expert chef who only responds to food-related queries.
+        First, evaluate the user's request to determine if it is about food, ingredients, or a recipe.
+
         User's request: "${userPrompt}"
 
-        Respond ONLY with a valid JSON object. Do NOT include any explanation or text before or after the JSON.
-        The JSON object must have the following format:
+        If the request is NOT food-related (e.g., it's about cars, video games, inappropriate topics, or random words), respond ONLY with the following JSON object:
+        {
+          "error": "Please enter a food-related request."
+        }
+
+        If the request IS food-related, respond ONLY with a valid JSON object containing the recipe. Do NOT include any explanation or text before or after the JSON.
+        The recipe JSON object must have the following format:
         {
           "recipeName": "string",
           "ingredients": ["string", "string"],
@@ -19,7 +25,6 @@ export const generateRecipe = async (userPrompt) => {
     `;
 
     try {
-        // Access the environment variable using import.meta.env
         const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
 
         const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -41,17 +46,19 @@ export const generateRecipe = async (userPrompt) => {
         }
 
         const data = await response.json();
-
-        // Extract the content from the OpenRouter response structure
         const content = data?.choices?.[0]?.message?.content?.trim();
         if (!content) {
             throw new Error("No content returned from OpenRouter");
         }
 
-        // Clean up potential markdown formatting and parse the JSON
         const cleaned = content.replace(/^```json|^```|```$/g, '').trim();
         const parsedJson = JSON.parse(cleaned);
         
+        // Check if the AI returned our specific error message.
+        if (parsedJson.error) {
+            return { error: parsedJson.error };
+        }
+
         return { data: parsedJson };
 
     } catch (err) {
