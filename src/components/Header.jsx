@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-// Import AnimatePresence from framer-motion
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChefHat, Utensils, Salad, LogOut } from 'lucide-react';
+import { ChefHat, Utensils, Salad, LogOut, Bookmark } from 'lucide-react';
 import { doSignOut } from '../auth/firebase';
 
 const Header = ({ setPage, user, onSignInClick }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleSignOut = () => {
+    doSignOut();
+    setPage('home'); // Redirect to home on sign out
+    setShowDropdown(false);
+  };
 
   return (
     <motion.header 
@@ -30,17 +35,13 @@ const Header = ({ setPage, user, onSignInClick }) => {
             <Salad className="w-5 h-5 hover:text-pink-400 transition-colors cursor-pointer"/>
             <div className="relative">
               {user ? (
-                // If user is logged in, show their profile picture
                 <button onClick={() => setShowDropdown(!showDropdown)} onBlur={() => setTimeout(() => setShowDropdown(false), 200)}>
-                  {/* This line is updated for a more robust fallback */}
                   <img src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email || 'C'}&background=d85c8b&color=fff`} alt="Profile" className="w-9 h-9 rounded-full border-2 border-pink-400" />
                 </button>
               ) : (
-                // If user is not logged in, show the sign-in button
                 <button onClick={onSignInClick} className="w-9 h-9 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"></button>
               )}
               
-              {/* Dropdown Menu */}
               <AnimatePresence>
                 {showDropdown && user && (
                   <motion.div
@@ -52,7 +53,12 @@ const Header = ({ setPage, user, onSignInClick }) => {
                     <div className="p-2">
                       <p className="text-sm font-semibold px-2 py-1 truncate">{user.displayName || user.email}</p>
                       <hr className="border-gray-700 my-1" />
-                      <button onClick={doSignOut} className="w-full flex items-center gap-2 text-left px-2 py-2 text-sm text-red-400 hover:bg-white/5 rounded">
+                      {/* New "My Recipes" button */}
+                      <button onClick={() => { setPage('my-recipes'); setShowDropdown(false); }} className="w-full flex items-center gap-2 text-left px-2 py-2 text-sm hover:bg-white/5 rounded">
+                        <Bookmark className="w-4 h-4" />
+                        My Recipes
+                      </button>
+                      <button onClick={handleSignOut} className="w-full flex items-center gap-2 text-left px-2 py-2 text-sm text-red-400 hover:bg-white/5 rounded">
                         <LogOut className="w-4 h-4" />
                         Sign Out
                       </button>

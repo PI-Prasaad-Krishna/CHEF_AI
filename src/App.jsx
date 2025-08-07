@@ -10,34 +10,27 @@ import AboutPage from './pages/AboutPage.jsx';
 import PricingPage from './pages/PricingPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import BlogPage from './pages/BlogPage.jsx';
+import MyRecipesPage from './pages/MyRecipesPage.jsx'; // Import the new page
 
 const App = () => {
     const [page, setPage] = useState('home');
-    const [user, setUser] = useState(null); // State for the current user
-    const [isAuthReady, setIsAuthReady] = useState(false); // State to check if Firebase auth has loaded
+    const [user, setUser] = useState(null);
+    const [isAuthReady, setIsAuthReady] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
 
-    // Listen for authentication changes when the app loads
     useEffect(() => {
         const unsubscribe = onAuthChange((user) => {
             setUser(user);
-            // Firebase has finished its initial check, so we can consider auth ready.
             setIsAuthReady(true);
         });
-        // Cleanup subscription on unmount
         return () => unsubscribe();
     }, []);
 
-    // New effect to show the modal on initial load if not logged in
     useEffect(() => {
-        // Only run this logic after Firebase has confirmed the auth state
         if (isAuthReady && !user) {
-            // Use a small timeout to prevent the modal from appearing too abruptly
             const timer = setTimeout(() => {
                 setShowAuthModal(true);
-            }, 1000); // 1-second delay
-            
-            // Cleanup the timer if the component unmounts
+            }, 1000);
             return () => clearTimeout(timer);
         }
     }, [isAuthReady, user]);
@@ -49,8 +42,10 @@ const App = () => {
             case 'pricing': return <PricingPage />;
             case 'contact': return <ContactPage />;
             case 'blog': return <BlogPage />;
+            // Add the new page to the router
+            case 'my-recipes': return <MyRecipesPage user={user} />;
             case 'home':
-            default: return <HomePage />;
+            default: return <HomePage user={user} />;
         }
     };
 

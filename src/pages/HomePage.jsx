@@ -6,7 +6,8 @@ import ImageCollage from '../components/ImageCollage.jsx';
 import RecipeModal from '../components/RecipeModal.jsx';
 import { generateRecipe as generateRecipeAPI } from '../api/gemini.js';
 
-const HomePage = () => {
+// HomePage now accepts the 'user' prop
+const HomePage = ({ user }) => {
     const [prompt, setPrompt] = useState('');
     const [recipe, setRecipe] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +54,6 @@ const HomePage = () => {
 
     return (
         <>
-            {/* The classes here have been simplified */}
             <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl w-full px-4">
                 {/* Left Column: Input & Controls */}
                 <div className="flex flex-col justify-center text-white">
@@ -129,7 +129,8 @@ const HomePage = () => {
                 {/* Right Column: Image Collage */}
                 <ImageCollage />
             </main>
-            <RecipeModal recipe={recipe} show={showRecipe} onClose={handleCloseRecipe} />
+            {/* Pass the user prop down to the RecipeModal */}
+            <RecipeModal recipe={recipe} show={showRecipe} onClose={handleCloseRecipe} user={user} />
         </>
     );
 };
