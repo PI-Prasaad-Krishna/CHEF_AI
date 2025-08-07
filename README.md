@@ -2,8 +2,7 @@
 
 Welcome to GetChef, a smart recipe generator that helps you create delicious meals from the ingredients you already have. Powered by AI, GetChef is designed to inspire creativity in the kitchen, reduce food waste, and make cooking fun and easy.
 
-![GetChef Screenshot](https://i.imgur.com/your-screenshot-url.png) 
-*(Suggestion: Replace this with a real screenshot of your app!)*
+
 
 ---
 
