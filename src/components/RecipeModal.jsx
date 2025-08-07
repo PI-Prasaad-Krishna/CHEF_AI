@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bookmark, Check } from 'lucide-react';
+import { X, Bookmark, Check, Trash2 } from 'lucide-react';
 import { saveRecipe } from '../auth/firebase';
 
-// The modal now accepts a 'user' prop
-const RecipeModal = ({ recipe, show, onClose, user }) => {
-    const [saveStatus, setSaveStatus] = useState('idle'); // 'idle', 'saving', 'saved'
+// The modal now accepts 'isSaved' and 'onDelete' props
+const RecipeModal = ({ recipe, show, onClose, user, isSaved = false, onDelete }) => {
+    const [saveStatus, setSaveStatus] = useState('idle');
 
     const handleSaveRecipe = async () => {
         if (!user || !recipe) return;
@@ -14,7 +14,7 @@ const RecipeModal = ({ recipe, show, onClose, user }) => {
         if (result.success) {
             setSaveStatus('saved');
         } else {
-            setSaveStatus('idle'); // Or show an error
+            setSaveStatus('idle');
         }
     };
 
@@ -41,19 +41,29 @@ const RecipeModal = ({ recipe, show, onClose, user }) => {
                             <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
                                 <X className="w-6 h-6" />
                             </button>
-                            <div className="flex justify-between items-start">
+                            <div className="flex justify-between items-start gap-4">
                                 <h2 className="text-3xl font-bold mb-6 text-pink-400">{recipe.recipeName}</h2>
-                                {/* Show save button only if user is logged in */}
                                 {user && (
-                                    <button 
-                                        onClick={handleSaveRecipe} 
-                                        disabled={saveStatus !== 'idle'}
-                                        className="flex items-center gap-2 bg-pink-500/20 text-pink-300 px-4 py-2 rounded-full hover:bg-pink-500/40 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {saveStatus === 'idle' && <><Bookmark className="w-5 h-5" /> Save</>}
-                                        {saveStatus === 'saving' && <>Saving...</>}
-                                        {saveStatus === 'saved' && <><Check className="w-5 h-5" /> Saved!</>}
-                                    </button>
+                                    isSaved ? (
+                                        // If the recipe is already saved, show a "Remove" button
+                                        <button 
+                                            onClick={onDelete} 
+                                            className="flex items-center gap-2 bg-red-500/20 text-red-300 px-4 py-2 rounded-full hover:bg-red-500/40 transition-colors"
+                                        >
+                                            <Trash2 className="w-5 h-5" /> Remove
+                                        </button>
+                                    ) : (
+                                        // Otherwise, show the "Save" button
+                                        <button 
+                                            onClick={handleSaveRecipe} 
+                                            disabled={saveStatus !== 'idle'}
+                                            className="flex items-center gap-2 bg-pink-500/20 text-pink-300 px-4 py-2 rounded-full hover:bg-pink-500/40 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {saveStatus === 'idle' && <><Bookmark className="w-5 h-5" /> Save</>}
+                                            {saveStatus === 'saving' && <>Saving...</>}
+                                            {saveStatus === 'saved' && <><Check className="w-5 h-5" /> Saved!</>}
+                                        </button>
+                                    )
                                 )}
                             </div>
                             
