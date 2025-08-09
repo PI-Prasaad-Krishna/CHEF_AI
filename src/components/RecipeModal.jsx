@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bookmark, Check, Trash2 } from 'lucide-react';
 import { saveRecipe } from '../auth/firebase';
 
-// The modal now accepts 'isSaved' and 'onDelete' props
 const RecipeModal = ({ recipe, show, onClose, user, isSaved = false, onDelete }) => {
     const [saveStatus, setSaveStatus] = useState('idle');
 
@@ -29,12 +28,13 @@ const RecipeModal = ({ recipe, show, onClose, user, isSaved = false, onDelete })
                     className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
                     onClick={onClose}
                 >
+                    {/* The new 'hide-scrollbar' class is added here */}
                     <motion.div
                         initial={{ scale: 0.9, y: 50, opacity: 0 }}
                         animate={{ scale: 1, y: 0, opacity: 1 }}
                         exit={{ scale: 0.9, y: 50, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                        className="bg-gray-800/50 backdrop-blur-xl border border-pink-500/20 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl shadow-pink-500/10 relative"
+                        className="bg-gray-800/50 backdrop-blur-xl border border-pink-500/20 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl shadow-pink-500/10 relative hide-scrollbar"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="p-8 text-white">
@@ -45,7 +45,6 @@ const RecipeModal = ({ recipe, show, onClose, user, isSaved = false, onDelete })
                                 <h2 className="text-3xl font-bold mb-6 text-pink-400">{recipe.recipeName}</h2>
                                 {user && (
                                     isSaved ? (
-                                        // If the recipe is already saved, show a "Remove" button
                                         <button 
                                             onClick={onDelete} 
                                             className="flex items-center gap-2 bg-red-500/20 text-red-300 px-4 py-2 rounded-full hover:bg-red-500/40 transition-colors"
@@ -53,7 +52,6 @@ const RecipeModal = ({ recipe, show, onClose, user, isSaved = false, onDelete })
                                             <Trash2 className="w-5 h-5" /> Remove
                                         </button>
                                     ) : (
-                                        // Otherwise, show the "Save" button
                                         <button 
                                             onClick={handleSaveRecipe} 
                                             disabled={saveStatus !== 'idle'}
