@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bookmark, Check, Trash2 } from 'lucide-react';
 import { saveRecipe } from '../auth/firebase';
 
 const RecipeModal = ({ recipe, show, onClose, user, isSaved = false, onDelete }) => {
     const [saveStatus, setSaveStatus] = useState('idle');
+    useEffect(() => {
+        if (recipe) {
+            setSaveStatus('idle');
+        }
+    }, [recipe]);
+
 
     const handleSaveRecipe = async () => {
         if (!user || !recipe) return;
@@ -28,7 +34,6 @@ const RecipeModal = ({ recipe, show, onClose, user, isSaved = false, onDelete })
                     className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
                     onClick={onClose}
                 >
-                    {/* The new 'hide-scrollbar' class is added here */}
                     <motion.div
                         initial={{ scale: 0.9, y: 50, opacity: 0 }}
                         animate={{ scale: 1, y: 0, opacity: 1 }}
