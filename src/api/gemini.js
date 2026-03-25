@@ -34,7 +34,7 @@ export const generateRecipe = async (userPrompt) => {
                 'Authorization': `Bearer ${apiKey}`,
             },
             body: JSON.stringify({
-                model: 'mistralai/mistral-7b-instruct',
+                model: 'openai/gpt-oss-120b',
                 messages: [
                     { role: 'user', content: prompt }
                 ],
